@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:elevation="5dp"
+        app:cardBackgroundColor="@color/light_white"
+        app:cardCornerRadius="8dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+
+            <LinearLayout
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buyer_phone"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/property_src"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:minWidth="100dp"
+                    android:minHeight="80dp"
+                    android:src="@mipmap/ic_launcher"></ImageView>
+
+
+                <TextView
+                    android:id="@+id/property_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:drawableRight="@drawable/ic_location_city_24px"
+                    android:drawablePadding="20dp"
+                    android:text="65 sdjfksd sdfdsfsdf"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"></TextView>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/appoinmnet_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/appoinment_time"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="end"
+                android:text="Viewing"
+
+                android:textColor="@android:color/black"
+                android:textSize="12sp"></TextView>
+
+            <TextView
+                android:id="@+id/appoinmnet_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/appoinmnet_date"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="end"
+                android:text="Viewing"
+
+                android:textColor="@android:color/black"
+                android:textSize="14sp"></TextView>
+
+            <TextView
+                android:id="@+id/appoinment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/rounded_background"
+                android:gravity="center"
+                android:minWidth="80dp"
+                android:text="8:00 AM"
+                android:textColor="@color/colorPinkend"
+                android:textSize="18sp"></TextView>
+
+            <TextView
+                android:id="@+id/buyer_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buyer_id"
+                android:layout_marginTop="5dp"
+                android:autoLink="all"
+
+                android:text="buyer@email.com"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/holo_blue_dark"
+                android:textSize="14sp"></TextView>
+
+
+            <TextView
+                android:id="@+id/buyer_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:autoLink="all"
+                android:text="Jeyaprakash"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/holo_blue_dark"
+                android:textSize="18sp"></TextView>
+
+            <TextView
+                android:id="@+id/buyer_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/buyer_email"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:autoLink="all"
+                android:clickable="true"
+                android:textColor="@android:color/black"
+                android:textColorLink="@android:color/holo_blue_dark"
+                android:textSize="14sp"></TextView>
+
+
+            <TextView
+                android:id="@+id/sheduledtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:text="@string/scheduled_at"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"></TextView>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
