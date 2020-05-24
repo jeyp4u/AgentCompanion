@@ -76,8 +76,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //appcenter
 
-
+    def appCenterSdkVersion = '3.2.1'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
 
 }
@@ -86,6 +89,6 @@ repositories {
 
     maven {
         name 'hypertrack'
-        url  'https://s3-us-west-2.amazonaws.com/m2.hypertrack.com/'
+        url 'https://s3-us-west-2.amazonaws.com/m2.hypertrack.com/'
     }
 }

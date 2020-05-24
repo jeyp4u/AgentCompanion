@@ -19,9 +19,13 @@ import com.aanda.agent.companion.views.ui.login.LoginActivity
 import com.hypertrack.sdk.HyperTrack
 import com.hypertrack.sdk.TrackingError
 import com.hypertrack.sdk.TrackingStateObserver
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 
 class SheduleService : IntentService("SheuledService") {
@@ -40,6 +44,10 @@ class SheduleService : IntentService("SheuledService") {
         Log.d(javaClass.name, "onHandleIntent appointment_id" + appointment_id)
         //createNotificationChannel()
 
+        if (!AppCenter.isConfigured()) {
+            AppCenter.start(application, "2d1c0c20-8a7c-4d25-8fdd-504cfa94c7bb",
+                    Analytics::class.java, Crashes::class.java)
+        }
         startTracking()
 
     }
@@ -72,40 +80,43 @@ class SheduleService : IntentService("SheuledService") {
 
     fun startAgentTrackingAsync() {
 
+        try {
 
-        apiHelper.sendAppointmentAsync(SendAppointment(negotiator_id,
-                "post_appointment_notification",
-                "ZegwMHyhYo3zEujwm9yF",
-                appointment_id)).enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d(javaClass.name, "appoinmentResult onFailure " + t)
-            }
+            apiHelper.sendAppointmentAsync(SendAppointment(negotiator_id,
+                    "post_appointment_notification",
+                    "ZegwMHyhYo3zEujwm9yF",
+                    appointment_id)).enqueue(object : Callback<String> {
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d(javaClass.name, "appoinmentResult onFailure " + t)
+                }
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d(javaClass.name, "appoinmentResult onResponse " + response)
-            }
-        })
-
-
-
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    Log.d(javaClass.name, "appoinmentResult onResponse " + response)
+                }
+            })
 
 
 
-        apiHelper.sendAppointmentTrackingStatusAsync(SendAppointmentTrackingStatus(negotiator_id = negotiator_id,
-                command = "post_appointment_tracking_status",
-                token = "ZegwMHyhYo3zEujwm9yF",
-                appointmentId = appointment_id, status = "1")).enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d(javaClass.name, "sendAppointmentTrackingStatusAsync onFailure " + t)
 
-            }
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d(javaClass.name, "sendAppointmentTrackingStatusAsync onResponse " + response + call.request().body)
-            }
-        })
-        // Toast.makeText(applicationContext, "Location sharing initiated...", Toast.LENGTH_LONG).show()
 
+            apiHelper.sendAppointmentTrackingStatusAsync(SendAppointmentTrackingStatus(negotiator_id = negotiator_id,
+                    command = "post_appointment_tracking_status",
+                    token = "ZegwMHyhYo3zEujwm9yF",
+                    appointmentId = appointment_id, status = "1")).enqueue(object : Callback<String> {
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d(javaClass.name, "sendAppointmentTrackingStatusAsync onFailure " + t)
+
+                }
+
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    Log.d(javaClass.name, "sendAppointmentTrackingStatusAsync onResponse " + response + call.request().body)
+                }
+            })
+            // Toast.makeText(applicationContext, "Location sharing initiated...", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Crashes.trackError(e)
+        }
     }
 
 

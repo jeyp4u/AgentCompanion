@@ -26,9 +26,13 @@ import com.aanda.agent.companion.views.DashBoardActivity
 import com.aanda.agent.companion.views.data.Result
 import com.aanda.agent.companion.views.data.model.Appointment
 import com.aanda.agent.companion.views.data.model.LoggedInUser
+import com.aanda.agent.companion.views.data.model.LoginResponse
 import com.aanda.agent.companion.views.data.model.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import org.json.JSONObject
 import java.io.InputStream
 import java.lang.reflect.Type
@@ -42,6 +46,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
+        AppCenter.start(application, "2d1c0c20-8a7c-4d25-8fdd-504cfa94c7bb",
+                Analytics::class.java, Crashes::class.java)
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -115,18 +121,36 @@ class LoginActivity : AppCompatActivity() {
                                     val startindex = result.data.indexOf("{")
 
                                     var jsonObject: String = result.data.subSequence(startindex, result.data.length).toString()
+                                    Log.d("login", "jsonObject==" + jsonObject)
 
                                     //  jsonObject = jsonObject.substring(0, jsonObject.indexOf("}"))
                                     val gson = Gson()
+
+                                    if (jsonObject.contains("error")) {
+
+                                        val obj: LoginResponse = gson.fromJson(jsonObject, LoginResponse::class.java)
+
+                                        val errorcode = obj!!.error
+
+                                        Toast.makeText(this@LoginActivity, "" + errorcode, Toast.LENGTH_SHORT).show()
+                                        return@Observer
+                                    }
+
                                     val obj: LoggedInUser = gson.fromJson(jsonObject, LoggedInUser::class.java)
+
+                                    if (obj.id == null) {
+
+                                        Toast.makeText(this@LoginActivity, "Login failed", Toast.LENGTH_SHORT).show()
+                                    } else {
 //
-                                    Log.d("login", "LoggedInUser==" + obj)
+                                        Log.d("login", "LoggedInUser==" + obj)
 
-                                    val dashboard: Intent = Intent(this@LoginActivity, DashBoardActivity::class.java)
+                                        val dashboard: Intent = Intent(this@LoginActivity, DashBoardActivity::class.java)
 
-                                    dashboard.putExtra("user", obj)
-                                    startActivity(dashboard)
-                                    finish()
+                                        dashboard.putExtra("user", obj)
+                                        startActivity(dashboard)
+                                        finish()
+                                    }
                                     //getAppoinments()
                                 }
 
@@ -135,7 +159,6 @@ class LoginActivity : AppCompatActivity() {
 
                 )
             }
-
 
 
             // Here, thisActivity is the current activity

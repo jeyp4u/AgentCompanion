@@ -1,4 +1,4 @@
 package com.aanda.agent.companion.views.data.model
 
-class LoginResponse() {
+data class LoginResponse(val error: String, val error_no: String) {
 }
