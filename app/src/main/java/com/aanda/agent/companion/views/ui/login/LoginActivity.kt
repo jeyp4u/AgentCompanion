@@ -110,8 +110,9 @@ class LoginActivity : AppCompatActivity() {
 
                             when (result) {
                                 is Result.Error -> {
-                                    showLoginFailed()
+                                    showLoginFailed(""+result.exception)
                                     loading.visibility = View.GONE
+                                    Crashes.trackError(result.exception)
                                 }
                                 is Result.Success -> {
                                     //updateUiWithUser(result.data)
@@ -122,6 +123,11 @@ class LoginActivity : AppCompatActivity() {
 
                                     var jsonObject: String = result.data.subSequence(startindex, result.data.length).toString()
                                     Log.d("login", "jsonObject==" + jsonObject)
+
+                                    val result = HashMap<String, String>()
+                                    result["LOGIN"] = jsonObject
+                                    Analytics.trackEvent("Login", result);
+
 
                                     //  jsonObject = jsonObject.substring(0, jsonObject.indexOf("}"))
                                     val gson = Gson()
@@ -136,17 +142,21 @@ class LoginActivity : AppCompatActivity() {
                                         return@Observer
                                     }
 
+
                                     val obj: LoggedInUser = gson.fromJson(jsonObject, LoggedInUser::class.java)
 
                                     if (obj.id == null) {
 
-                                        Toast.makeText(this@LoginActivity, "Login failed", Toast.LENGTH_SHORT).show()
+                                        showLoginFailed("not valid response from server...")
                                     } else {
 //
                                         Log.d("login", "LoggedInUser==" + obj)
 
                                         val dashboard: Intent = Intent(this@LoginActivity, DashBoardActivity::class.java)
 
+                                        val result = HashMap<String, String>()
+                                        result["USER"] = obj.id
+                                        Analytics.trackEvent("Login success", result);
                                         dashboard.putExtra("user", obj)
                                         startActivity(dashboard)
                                         finish()
@@ -214,8 +224,8 @@ class LoginActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun showLoginFailed() {
-        Toast.makeText(applicationContext, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
+    private fun showLoginFailed(value: String) {
+        Toast.makeText(applicationContext, getString(R.string.login_failed) + " - " + value, Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -88,20 +88,30 @@ class DashBoardActivity : FragmentActivity() {
             getAppointments()
             hyperTrack = HyperTrack.getInstance(this, AppConstants.HYPER_TRACK_ACCOUNT_PUBLISHABLE_KEY)
 
+            val result = HashMap<String, String>()
+            result["device id"] = hyperTrack.deviceID
+            result["user id"] = user.id
 
+            Analytics.trackEvent("user data", result);
             hyperTrack.addTrackingListener(object : TrackingStateObserver.OnTrackingStateChangeListener {
                 override fun onTrackingStart() {
+                    Analytics.trackEvent("onTrackingStart", result);
 
                     sharing.setImageResource(R.drawable.ic_location_on_24px)
                     sharing.setColorFilter(ContextCompat.getColor(this@DashBoardActivity, android.R.color.holo_green_light), android.graphics.PorterDuff.Mode.SRC_IN);
                 }
 
                 override fun onError(p0: TrackingError?) {
+
+                    Analytics.trackEvent("TrackingError", result);
+
                     sharing.setImageResource(R.drawable.ic_location_off_24px)
                     sharing.setColorFilter(ContextCompat.getColor(this@DashBoardActivity, android.R.color.holo_red_light), android.graphics.PorterDuff.Mode.SRC_IN);
                 }
 
                 override fun onTrackingStop() {
+                    Analytics.trackEvent("onTrackingStop", result);
+
                     sharing.setImageResource(R.drawable.ic_location_off_24px)
                     sharing.setColorFilter(ContextCompat.getColor(this@DashBoardActivity, android.R.color.holo_red_light), android.graphics.PorterDuff.Mode.SRC_IN);
                 }
@@ -188,6 +198,8 @@ class DashBoardActivity : FragmentActivity() {
                     is Result.Error -> {
                         Log.d(javaClass.name, "Exception::" + resource.exception)
                         progressCircle.visibility = View.GONE
+                        Crashes.trackError(resource.exception)
+
 
                     }
                     is Result.Success -> {
@@ -208,6 +220,11 @@ class DashBoardActivity : FragmentActivity() {
                             }
 
                         })
+                        val result = HashMap<String, String>()
+                        result["appointments"] = models.toString()
+                        result["user id"] = user.id
+
+                        Analytics.trackEvent("appointments", result);
                         sheduleAppointments()
                     }
                 }
@@ -230,10 +247,15 @@ class DashBoardActivity : FragmentActivity() {
                     is Result.Error -> {
                         Log.d(javaClass.name, "Exception::" + resource.exception)
                         progressCircle.visibility = View.GONE
+                        Crashes.trackError(resource.exception)
 
                     }
                     is Result.Success -> {
 
+
+                        val result = HashMap<String, String>()
+                        result["user id"] = user.id
+                        Analytics.trackEvent("logout", result);
                         Log.d(javaClass.name, "Appoinments" + resource.data)
 
                         Log.d(javaClass.name, "appointments" + models)
@@ -287,7 +309,12 @@ class DashBoardActivity : FragmentActivity() {
                 count++
                 Log.d(javaClass.name, "sheduleAppointments count  " + count)
             }
+            val result = HashMap<String, String>()
 
+            result["sheduled"] = "" + models.size
+            result["user id"] = user.id
+
+            Analytics.trackEvent("Sheduled", result);
 
         } catch (e: java.lang.Exception) {
 

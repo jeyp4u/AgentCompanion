@@ -88,6 +88,9 @@ class SheduleService : IntentService("SheuledService") {
                     appointment_id)).enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.d(javaClass.name, "appoinmentResult onFailure " + t)
+
+                    Crashes.trackError(t)
+
                 }
 
                 override fun onResponse(call: Call<String>, response: Response<String>) {
@@ -106,6 +109,9 @@ class SheduleService : IntentService("SheuledService") {
                     appointmentId = appointment_id, status = "1")).enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.d(javaClass.name, "sendAppointmentTrackingStatusAsync onFailure " + t)
+
+                    Crashes.trackError(t)
+
 
                 }
 

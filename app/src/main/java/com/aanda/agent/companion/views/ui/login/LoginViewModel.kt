@@ -58,6 +58,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             emit(Result.Error(exception))
             Log.d("login", "Result.Exception" + exception)
 
+
         }
     }
 
